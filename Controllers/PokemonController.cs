@@ -44,10 +44,12 @@ namespace Pokemon.Controllers
             var pokemon = await _pokemonService.GetPokemonOrNullAsync(name, token);
             if (pokemon == null)
             {
-                return NotFound("There is no pokemon with the name you provided.");
+                return NotFound($"There is no pokemon with the name {name}.");
             }
 
             return Ok(pokemon);
         }
+
+
     }
 }

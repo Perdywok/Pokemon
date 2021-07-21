@@ -26,15 +26,12 @@ namespace Pokemon
             {
                 client.BaseAddress = new Uri(Configuration["PokemonUrl"]);
             });
-            services.AddHttpClient<IShakespeareTranslationProvider, ShakespeareTranslationProvider>(client =>
-            {
-                client.BaseAddress = new Uri(Configuration["ShakespeareUrl"]);
-            });
-            services.AddHttpClient<IYodaTranslationProvider, YodaTranslationProvider>(client =>
-            {
-                client.BaseAddress = new Uri(Configuration["YodaUrl"]);
-            });
+            services.AddHttpClient<IPhraseTranslator, Translator>();
             services.AddScoped<ITranslationPokemonService, TranslationPokemonService>();
+            services.Configure<TranslationOptions>((settings) =>
+            {
+                Configuration.GetSection("TranslationOptions").Bind(settings);
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

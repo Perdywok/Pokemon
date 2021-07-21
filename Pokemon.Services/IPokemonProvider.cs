@@ -7,7 +7,7 @@ namespace Pokemon.Services
     public interface IPokemonProvider
     {
         /// <summary>
-        /// Returns pokemon description or null if it's not found.
+        /// Returns pokemon full description;
         /// </summary>
         /// <param name="name"></param>
         /// <param name="token"></param>

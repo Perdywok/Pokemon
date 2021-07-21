@@ -1,4 +1,5 @@
-﻿using Pokemon.Services.Models;
+﻿using Pokemon.Services.Enums;
+using Pokemon.Services.Models;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -8,34 +9,31 @@ namespace Pokemon.Services
     public class TranslationPokemonService : ITranslationPokemonService
     {
         private readonly IPokemonProvider _pokemonProvider;
-        private readonly IYodaTranslationProvider _yodaTranslationProvider;
-        private readonly IShakespeareTranslationProvider _shakespeareTranslationProvider;
+        private readonly IPhraseTranslator _translator;
 
-        public TranslationPokemonService(IPokemonProvider pokemonProvider, IYodaTranslationProvider yodaTranslationProvider, IShakespeareTranslationProvider shakespeareTranslationProvider)
+        public TranslationPokemonService(IPokemonProvider pokemonProvider, IPhraseTranslator translator)
         {
-            _shakespeareTranslationProvider = shakespeareTranslationProvider;
-            _yodaTranslationProvider = yodaTranslationProvider;
             _pokemonProvider = pokemonProvider;
+            _translator = translator;
         }
 
         public async Task<PokemonResponse> GetTranslatedPokemon(string name, CancellationToken token)
         {
-            var pokemon = await _pokemonProvider.GetPokemonAsync(name, token);
+            PokemonResponse pokemon = await _pokemonProvider.GetPokemonAsync(name, token);
+            TranslationType translationType;
             if (pokemon.Habitat == "cave" || pokemon.IsLegendary)
             {
-                var translatedDescriptionResponse = await _yodaTranslationProvider.Translate(pokemon.Description, token);
-                if (translatedDescriptionResponse.IsSuccessful)
-                {
-                    pokemon.Description = translatedDescriptionResponse.Text;
-                }
+                translationType = TranslationType.Yoda;
             }
             else
             {
-                var translatedDescriptionResponse = await _shakespeareTranslationProvider.Translate(pokemon.Description, token);
-                if (translatedDescriptionResponse.IsSuccessful)
-                {
-                    pokemon.Description = translatedDescriptionResponse.Text;
-                }
+                translationType = TranslationType.Shakespeare;
+            }
+
+            var translatedDescriptionResponse = await _translator.Translate(translationType, pokemon.Description, token);
+            if (translatedDescriptionResponse.IsSuccessful)
+            {
+                pokemon.Description = translatedDescriptionResponse.Text;
             }
 
             return pokemon;

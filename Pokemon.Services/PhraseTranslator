@@ -1,5 +1,8 @@
 ﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using Pokemon.Services.Enums;
+using Pokemon.Services.Exceptions;
 using Pokemon.Services.Models;
 using System.Net.Http;
 using System.Threading;
@@ -7,20 +10,28 @@ using System.Threading.Tasks;
 
 namespace Pokemon.Services
 {
-    public class YodaTranslationProvider : IYodaTranslationProvider
+    public class Translator : IPhraseTranslator
     {
+        private readonly TranslationOptions _options;
         private readonly HttpClient _httpClient;
-        private readonly ILogger<YodaTranslationProvider> _logger;
+        private readonly ILogger<Translator> _logger;
 
-        public YodaTranslationProvider(HttpClient httpClient, ILogger<YodaTranslationProvider> logger)
+        public Translator(IOptions<TranslationOptions> options, HttpClient httpClient, ILogger<Translator> logger)
         {
+            _options = options.Value;
             _httpClient = httpClient;
             _logger = logger;
         }
 
-        public async Task<TranslationResponse> Translate(string strToTranslate, CancellationToken token)
+        public async Task<TranslationResponse> Translate(TranslationType type, string strToTranslate, CancellationToken token)
         {
-            var translationResponse = await _httpClient.GetAsync($"?text={strToTranslate}", token);
+            _options.TranslationUrls.TryGetValue(type.ToString(), out string url);
+            if (string.IsNullOrEmpty(url))
+            {
+                throw new PokemonException($"Unknown type of TranslationType enum. Value is {type}");
+            }
+
+            var translationResponse = await _httpClient.GetAsync($"{url}?text={strToTranslate}", token);
 
             if (!translationResponse.IsSuccessStatusCode)
             {

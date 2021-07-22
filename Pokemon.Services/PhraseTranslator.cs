@@ -10,13 +10,13 @@ using System.Threading.Tasks;
 
 namespace Pokemon.Services
 {
-    public class Translator : IPhraseTranslator
+    public class PhraseTranslator : IPhraseTranslator
     {
         private readonly TranslationOptions _options;
         private readonly HttpClient _httpClient;
-        private readonly ILogger<Translator> _logger;
+        private readonly ILogger<PhraseTranslator> _logger;
 
-        public Translator(IOptions<TranslationOptions> options, HttpClient httpClient, ILogger<Translator> logger)
+        public PhraseTranslator(IOptions<TranslationOptions> options, HttpClient httpClient, ILogger<PhraseTranslator> logger)
         {
             _options = options.Value;
             _httpClient = httpClient;
@@ -28,11 +28,11 @@ namespace Pokemon.Services
             _options.TranslationUrls.TryGetValue(type.ToString(), out string url);
             if (string.IsNullOrEmpty(url))
             {
-                throw new PokemonException($"Unknown type of TranslationType enum. Value is {type}");
+                _logger.LogError($"Unknown type of TranslationType enum. Value is {type}");
+                throw new PokemonException("Translation error.");
             }
 
             var translationResponse = await _httpClient.GetAsync($"{url}?text={strToTranslate}", token);
-
             if (!translationResponse.IsSuccessStatusCode)
             {
                 _logger.LogError($"GET Shakespeare translation is failed for string {strToTranslate}. Status code is {translationResponse.StatusCode}");

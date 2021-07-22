@@ -26,7 +26,7 @@ namespace Pokemon
             {
                 client.BaseAddress = new Uri(Configuration["PokemonUrl"]);
             });
-            services.AddHttpClient<IPhraseTranslator, Translator>();
+            services.AddHttpClient<IPhraseTranslator, PhraseTranslator>();
             services.AddScoped<ITranslationPokemonService, TranslationPokemonService>();
             services.Configure<TranslationOptions>((settings) =>
             {

@@ -10,6 +10,8 @@ namespace Pokemon.Tests
     : IClassFixture<WebApplicationFactory<Startup>>
     {
         private readonly WebApplicationFactory<Startup> _factory;
+        private const string ExistingPokemon = "ditto";
+        private const string NonExistentPokemon = "someFunnyName";
 
         public PokemonControllerTests(WebApplicationFactory<Startup> factory)
         {
@@ -21,7 +23,7 @@ namespace Pokemon.Tests
         {
             // Arrange
             var client = _factory.CreateClient();
-            var url = "api/pokemon/ditto";
+            var url = $"api/pokemon/{ExistingPokemon}";
 
             // Act
             var response = await client.GetAsync(url);
@@ -37,7 +39,37 @@ namespace Pokemon.Tests
         {
             // Arrange
             var client = _factory.CreateClient();
-            var url = "api/pokemon/someFunnyName";
+            var url = $"api/pokemon/{NonExistentPokemon}";
+
+            // Act
+            var response = await client.GetAsync(url);
+
+            // Assert
+            response.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        }
+
+        [Fact]
+        public async Task PokemonController_GetTranslated_ExistingPokemon_ReturnsOk()
+        {
+            // Arrange
+            var client = _factory.CreateClient();
+            var url = $"api/pokemon/translated/{ExistingPokemon}";
+
+            // Act
+            var response = await client.GetAsync(url);
+
+            // Assert
+            response.EnsureSuccessStatusCode(); // Status Code 200-299
+            response.Content.Headers.ContentType.ToString()
+                .Should().Be("application/json; charset=utf-8");
+        }
+
+        [Fact]
+        public async Task PokemonController_GetTranslated_NonExistentPokemon_ReturnsNotFound()
+        {
+            // Arrange
+            var client = _factory.CreateClient();
+            var url = $"api/pokemon/translated/{NonExistentPokemon}";
 
             // Act
             var response = await client.GetAsync(url);

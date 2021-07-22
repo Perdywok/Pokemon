@@ -6,11 +6,6 @@
 
   <ItemGroup>
     <None Remove=".gitignore" />
-    <None Remove="PhraseTranslator" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Include="PhraseTranslator" />
   </ItemGroup>
 
   <ItemGroup>

@@ -29,10 +29,11 @@ namespace Pokemon.Services
             {
                 if (response.StatusCode == HttpStatusCode.NotFound)
                 {
+                    _logger.LogWarning($"GET pokemon-species pokemon {name} is not found.");
                     throw new PokemonException(HttpStatusCode.NotFound, $"There is no pokemon with the name {name}.");
                 }
 
-                _logger.LogWarning($"GET pokemon-species is failed for name {name}");
+                _logger.LogError($"GET pokemon-species is failed for name {name}. Status code is {response.StatusCode}");
                 throw new PokemonException(HttpStatusCode.ServiceUnavailable, "Service is temporarily unavailable");
             }
 

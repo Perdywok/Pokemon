@@ -21,10 +21,6 @@ namespace Pokemon.Tests
         public async Task PokemonProvider_GetPokemonAsync_ReturnsDeserializedPokemon()
         {
             // arrange
-            var message = new HttpResponseMessage
-            {
-                StatusCode = HttpStatusCode.OK,
-            };
             var responseModel = new RawPokemonResponse
             {
                 name = "asd",
@@ -32,7 +28,11 @@ namespace Pokemon.Tests
                 habitat = new Habitat { name = "somename" },
                 is_legendary = false
             };
-            message.Content = new StringContent(JsonConvert.SerializeObject(responseModel));
+            var message = new HttpResponseMessage
+            {
+                StatusCode = HttpStatusCode.OK,
+                Content = new StringContent(JsonConvert.SerializeObject(responseModel))
+            };
 
             var httpclient = HttpClientMocker.MockHttpClient(message);
             var logger = Mock.Of<ILogger<PokemonProvider>>();
@@ -58,14 +58,14 @@ namespace Pokemon.Tests
         public async void PokemonProvider_GetPokemonAsync_ThrowsException(HttpStatusCode requestCode, HttpStatusCode exceptionCode)
         {
             // arrange
-            var message = new HttpResponseMessage
+            var httpResponse = new HttpResponseMessage
             {
                 StatusCode = requestCode,
             };
 
-            var httpclient = HttpClientMocker.MockHttpClient(message);
+            var httpClient = HttpClientMocker.MockHttpClient(httpResponse);
             var logger = Mock.Of<ILogger<PokemonProvider>>();
-            var provider = new PokemonProvider(httpclient, logger);
+            var provider = new PokemonProvider(httpClient, logger);
 
             CancellationTokenSource cancelTokenSource = new();
             CancellationToken token = cancelTokenSource.Token;

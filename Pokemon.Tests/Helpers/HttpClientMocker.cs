@@ -11,13 +11,6 @@ namespace Pokemon.Tests.Helpers
     {
         public static HttpClient MockHttpClient(HttpResponseMessage message)
         {
-            //var mockClient = new Mock<HttpClient>();
-            //mockClient.Setup(client => client.SendAsync(It.IsAny<HttpRequestMessage>(), It.IsAny<CancellationToken>()))
-            //    .ReturnsAsync(message);
-
-            //var client = mockClient.Object;
-            //client.BaseAddress = new Uri("https://test/");
-            //return client;
             var mockHttpMessageHandler = new Mock<HttpMessageHandler>();
             mockHttpMessageHandler
                 .Protected()

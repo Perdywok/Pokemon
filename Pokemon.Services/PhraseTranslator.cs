@@ -35,7 +35,7 @@ namespace Pokemon.Services
             var translationResponse = await _httpClient.GetAsync($"{url}?text={strToTranslate}", token);
             if (!translationResponse.IsSuccessStatusCode)
             {
-                _logger.LogError($"GET Shakespeare translation is failed for string {strToTranslate}. Status code is {translationResponse.StatusCode}");
+                _logger.LogError($"GET translation is failed for string {strToTranslate}. Status code is {translationResponse.StatusCode}");
                 return new TranslationResponse { IsSuccessful = false };
             }
 

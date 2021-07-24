@@ -39,7 +39,7 @@ namespace Pokemon.Controllers
             {
                 return BadRequest("Incorrect name. Please specify non empty pokemon name.");
             }
-            // https://pokeapi.co/api/v2/pokemon/ditto
+            
             var pokemon = await _pokemonService.GetPokemonAsync(name, token);
             return Ok(pokemon);
         }

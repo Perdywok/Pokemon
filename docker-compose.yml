@@ -1,0 +1,8 @@
+version: "3.9"
+services:
+    pokemon-api:
+      build:
+        context: .
+        dockerfile: Pokemon/Dockerfile
+      ports:
+          - "8000:80"

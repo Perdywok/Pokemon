@@ -7,14 +7,15 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
 WORKDIR /src
-COPY ["Pokemon/Pokemon.csproj", "Pokemon/"]
-RUN dotnet restore "Pokemon/Pokemon.csproj"
+COPY ["Pokemon/Pokemon.csproj", "/Pokemon/Pokemon.csproj"]
+COPY ["Pokemon.Services/Pokemon.Services.csproj", "/Pokemon.Services"]
+RUN dotnet restore /Pokemon/Pokemon.csproj
 COPY . .
-WORKDIR "/src/Pokemon"
-RUN dotnet build "Pokemon.csproj" -c Release -o /app/build
+WORKDIR "/src"
+RUN dotnet build "Pokemon/Pokemon.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "Pokemon.csproj" -c Release -o /app/publish
+RUN dotnet publish "Pokemon/Pokemon.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app

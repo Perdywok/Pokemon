@@ -19,7 +19,7 @@ using Xunit;
 using Newtonsoft.Json;
 
 
-namespace Pokemon.Tests
+namespace Pokemon.UnitTests.Tests
 {
     public class PhraseTranslatorTests
     {

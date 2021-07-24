@@ -3,15 +3,11 @@ using Moq;
 using Pokemon.Services;
 using Pokemon.Services.Enums;
 using Pokemon.Services.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Pokemon.Tests
+namespace Pokemon.UnitTests.Tests
 {
     public class TranslationPokemonServiceTests
     {

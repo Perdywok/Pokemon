@@ -4,7 +4,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Pokemon.Tests
+namespace Pokemon.IntegrationTests.Tests
 {
     public class PokemonControllerTests
     : IClassFixture<WebApplicationFactory<Startup>>

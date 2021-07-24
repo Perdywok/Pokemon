@@ -13,7 +13,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Pokemon.Tests
+namespace Pokemon.UnitTests.Tests
 {
     public class PokemonProviderTests
     {

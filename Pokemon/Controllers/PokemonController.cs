@@ -45,6 +45,8 @@ namespace Pokemon.Controllers
         }
 
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PokemonResponse))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpGet("translated/{name}")]
         [ResponseCache(Location = ResponseCacheLocation.Any, Duration = 1800)]
         public async Task<IActionResult> GetTranslated([FromRoute] string name, CancellationToken token)

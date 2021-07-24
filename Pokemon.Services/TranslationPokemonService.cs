@@ -20,6 +20,8 @@ namespace Pokemon.Services
         public async Task<PokemonResponse> GetTranslatedPokemon(string name, CancellationToken token)
         {
             PokemonResponse pokemon = await _pokemonProvider.GetPokemonAsync(name, token);
+            // we should place TranslationType to database and get it from there instead of the enum.
+            // but a database is not mentioned in test task so...
             TranslationType translationType;
             if (pokemon.Habitat == "cave" || pokemon.IsLegendary)
             {

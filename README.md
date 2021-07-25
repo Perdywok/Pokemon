@@ -29,3 +29,4 @@ dotnet test .\Pokemon.Tests
 ## Possible improvements for production
 1. Use distributed cache storage for responses from third party APIs.
 2. Use database to store types of translation. Current implementation stores it in appsettings.json.
+3. Add logging of httpclient request/responses and log requests to the API in general.
